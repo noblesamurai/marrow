@@ -13,8 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Marrow.  If not, see <http://www.gnu.org/licenses/>.
 
-require File.join(File.dirname(__FILE__), "marrow", "env")
-require File.join(File.dirname(__FILE__), "marrow", "lorem")
+## @desc Actions involving waiting for things, error messages and block messages on timeouts, etc.
 
-require File.join(File.dirname(__FILE__), "marrow", "number_steps")
-require File.join(File.dirname(__FILE__), "marrow", "time_steps")
+Then /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})$/ do |time|
+  ## @desc Pauses test execution for |time|.
+  sleep time
+end
