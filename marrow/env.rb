@@ -85,6 +85,15 @@ def BeforeStep &block
   Cucumber::Ast::StepInvocation.class_variable_set "@@before_steps", before_steps
 end
 
+def WarpTransform(rxp, &block)
+	When /^(.*)#{rxp}(.*)$/	do |*args|
+		before = args[0]
+		after = args[-1]
+
+		When "#{before}#{block.call(*args[1..-2])}#{after}"
+	end
+end
+
 module Cucumber
   module Ast
 	class StepInvocation
