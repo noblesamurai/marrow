@@ -28,12 +28,13 @@ Ordinalities = %w(first second third fourth fifth sixth seventh eighth) +
 
 OrdinalityRegexp = /(every|any|the\ (first|second|third|fourth|fifth|sixth|seventh|eighth|
 				 ninth|tenth|evelenth|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|
-				 seventeenth|eighteenth|nineteenth|twentieth|[1-9][0-9]*(?:th|nd|rd|st)))/xi
+				 seventeenth|eighteenth|nineteenth|twentieth|last|[1-9][0-9]*(?:th|nd|rd|st)))/xi
 Ordinality = LaserTransform OrdinalityRegexp do |type, ordinality|
   ## @name Ordinality
-  ## @format (every|any|the (first|second|third|fourth|fifth|...|1st|2nd|3rd|4th|5th|...))
-  ## @desc Represents an ordinality - denoting position in a sequence. English words are supported up to "twentieth" - otherwise use the numeric form (unlimited). Note that a zero index <strong>is not</strong> possible - arrays of objects start at 'first', not 'zeroth'.
+  ## @format (every|any|the (first|second|third|fourth|fifth|...|last|1st|2nd|3rd|4th|5th|...))
+  ## @desc Represents an ordinality - denoting position in a sequence. English words are supported up to "twentieth" - otherwise use the numeric form (unlimited). Note that a zero index <strong>is not</strong> possible - arrays of objects start at 'first', not 'zeroth'. You can request the last (-1th) if the object supports it.
   next type if type == 'every' or type == 'any'
+  next -1 if type == 'last'
   next Ordinalities.index(ordinality.downcase) if Ordinalities.include?(ordinality.downcase)
   ordinality.to_i - 1
 end
