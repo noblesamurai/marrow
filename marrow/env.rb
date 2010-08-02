@@ -95,16 +95,56 @@ def WarpTransform(rxp, &block)
 end
 
 module Cucumber
-  module Ast
-	class StepInvocation
-	  alias _real_honest_invoke invoke
-	  def invoke *opts, &b
-		@@before_steps.each do |b|
-		  instance_eval &b
-		end
-		_real_honest_invoke *opts, &b
-	  end
+	class StepMother
+    def invoke_steps(steps_text, natural_language)
+      ored_keywords = natural_language.step_keywords.map{|kw| Regexp.escape(kw)}.join("|")
+      steps_text.strip.split(/(?=^\s*(?:#{ored_keywords}))/).map { |step| step.strip }.each do |step|
+        output = step.match(/^\s*(#{ored_keywords})([^\n]+)(\n.*)?$/m)
+
+        action, step_name, table_or_string = output[1].strip, output[2], output[3]
+        if table_or_string.to_s.strip =~ /^\|/
+          table_or_string = table(table_or_string)
+        elsif table_or_string.to_s.strip =~ /^"""/
+          table_or_string = py_string(table_or_string.gsub(/^\n/, ""))
+        end
+        args = [step_name, table_or_string].compact
+
+				@extra_indent ||= 0
+				@extra_indent += 2
+
+				realstep = Ast::Step.new(1, action.indent(@extra_indent), step_name, table_or_string)
+				scenario = Ast::Scenario.new(
+					background=nil,
+					comment=Ast::Comment.new(""),
+					tags=Ast::Tags.new(98, []),
+					line=99,
+					keyword="",
+					name="",
+					steps=[realstep]
+				)
+				invocation = realstep.step_invocation
+				step_collection = Ast::StepCollection.new([invocation])
+
+				@visitor.visit_step(invocation)
+				@extra_indent -= 2
+      end
+    end
 	end
+
+  module Ast
+		class TreeWalker
+			attr_accessor :listeners
+		end
+
+		class StepInvocation
+			alias _real_honest_invoke invoke
+			def invoke *opts, &b
+			@@before_steps.each do |b|
+				instance_eval &b
+			end
+			_real_honest_invoke *opts, &b
+			end
+		end
   end
 
   module RbSupport
@@ -227,11 +267,11 @@ module Cucumber
       def Transform(arg, *contexts)
 	  	return arg unless arg.is_a? String
 
-		if contexts.length > 0
-		  context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
-		else
-		  context = nil
-		end
+			if contexts.length > 0
+				context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
+			else
+				context = nil
+			end
 
         rb = @__cucumber_step_mother.load_programming_language('rb')
         rb.execute_transforms([arg], context, false).first
@@ -252,15 +292,15 @@ module Cucumber
 		  end
 
 		  if matching_transform
-			if stepexp and matching_transform.is_a? RbSupport::RbLaserTransform
-			  matching_transform.invoke(arg, captures[args.index(arg)])
-			else
-			  matching_transform.invoke(arg)
-			end
+				if stepexp and matching_transform.is_a? RbSupport::RbLaserTransform
+					matching_transform.invoke(arg, captures[args.index(arg)])
+				else
+					matching_transform.invoke(arg)
+				end
 		  else
-			arg
+				arg
 		  end
-        end
+			end
 	  end
 	end
   end
