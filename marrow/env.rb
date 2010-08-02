@@ -126,6 +126,9 @@ module Cucumber
 				step_collection = Ast::StepCollection.new([invocation])
 
 				@visitor.visit_step(invocation)
+
+				invocation.status.should == :passed
+
 				@extra_indent -= 2
       end
     end
