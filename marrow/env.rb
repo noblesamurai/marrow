@@ -90,7 +90,7 @@ def WarpTransform(rxp, &block)
 		before = args[0]
 		after = args[-1]
 
-		When "#{before}#{block.call(*args[1..-2])}#{after}"
+		steps "When #{before}#{block.call(*args[1..-2])}#{after}"
 	end
 end
 

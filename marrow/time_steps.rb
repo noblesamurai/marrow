@@ -20,7 +20,7 @@ When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})$/ do |time|
   sleep time
 end
 
-WrapTransform /within (#{TimeLength})/ do |step, time|
+WrapTransform /within (#{TimeLength})(?:checking every (#{TimeLength}))?/ do |step, time, check|
   count = 0
 
   loop do
@@ -35,7 +35,7 @@ WrapTransform /within (#{TimeLength})/ do |step, time|
         raise e
       else
         count += 1
-        sleep 1
+        sleep check
       end
     end
 
