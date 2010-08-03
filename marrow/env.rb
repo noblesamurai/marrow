@@ -102,12 +102,13 @@ end
 
 module Cucumber
 	class StepMother
-    def invoke_steps(steps_text, natural_language)
+
+    def invoke_steps(steps_text, natural_language, origin)
       ored_keywords = natural_language.step_keywords.map{|kw| Regexp.escape(kw)}.join("|")
       steps_text.strip.split(/(?=^\s*(?:#{ored_keywords}))/).map { |step| step.strip }.each do |step|
         output = step.match(/^\s*(#{ored_keywords})([^\n]+)(\n.*)?$/m)
 
-        action, step_name, table_or_string = output[1].strip, output[2], output[3]
+        action, step_name, table_or_string = output[1], output[2], output[3]
         if table_or_string.to_s.strip =~ /^\|/
           table_or_string = table(table_or_string)
         elsif table_or_string.to_s.strip =~ /^"""/
@@ -128,6 +129,7 @@ module Cucumber
 					name="",
 					steps=[realstep]
 				)
+				realstep.feature_element = scenario
 				invocation = realstep.step_invocation
 				step_collection = Ast::StepCollection.new([invocation])
 
