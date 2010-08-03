@@ -94,6 +94,12 @@ def WarpTransform(rxp, &block)
 	end
 end
 
+def WrapTransform(rxp, &block)
+	When /^(.*) #{rxp}$/ do |step, *args|
+		instance_exec(step, *args, &block)
+	end
+end
+
 module Cucumber
 	class StepMother
     def invoke_steps(steps_text, natural_language)

@@ -15,7 +15,29 @@
 
 ## @desc Actions involving waiting for things, error messages and block messages on timeouts, etc.
 
-Then /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})$/ do |time|
+When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})$/ do |time|
   ## @desc Pauses test execution for |time|.
   sleep time
+end
+
+WrapTransform /within (#{TimeLength})/ do |step, time|
+  count = 0
+
+  loop do
+
+    begin
+      When step
+      break
+    rescue Exception => e
+      raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
+
+      if count > time
+        raise e
+      else
+        count += 1
+        sleep 1
+      end
+    end
+
+  end
 end
