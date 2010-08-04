@@ -7,7 +7,7 @@ More here soon.
 
 ## contributors
 
- - [Daniel Assange](http://github.com/lumifish) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Daniel Assange](http://github.com/somnidea) with [Noble Samurai](http://github.com/noblesamurai)
  - [Arlen Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
  - You?
 
