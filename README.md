@@ -9,6 +9,7 @@ More here soon.
 
  - [Daniel Assange](http://github.com/somnidea) with [Noble Samurai](http://github.com/noblesamurai)
  - [Arlen Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Dale Maggee](http://github.com/AntiSol) with [Noble Samurai](http://github.com/noblesamurai)
  - You?
 
 ## license
