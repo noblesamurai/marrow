@@ -15,7 +15,7 @@
 
 ## @desc Actions involving waiting for things, error messages and block messages on timeouts, etc.
 
-When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})$/ do |time|
+When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})(?: .*)?$/ do |time|
   ## @desc Pauses test execution for |time|.
   sleep time
 end
