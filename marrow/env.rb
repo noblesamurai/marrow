@@ -130,6 +130,7 @@ module Cucumber
 					steps=[realstep]
 				)
 				realstep.feature_element = scenario
+				realstep.instance_eval { @file_colon_line = "invoke:#{@extra_indent/2}" }
 				invocation = realstep.step_invocation
 				step_collection = Ast::StepCollection.new([invocation])
 
