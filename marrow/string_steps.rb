@@ -16,7 +16,8 @@
 ## @desc Actions/transforms for general string processing.
 
 # HACK (Daniel): Can't use backreferences with non_catching_regex.
-QuotedValueRegexp = /(?:the )?(?:value |phrase |text )?(?:"((?:[^"\\]|\\"|\\n|\\\\)*)")|(?:'((?:[^'\\]|\\'|\\n|\\\\)*)')/
+QuotedValueRegexp = /(?:the )?(?:value |phrase |text )?(?:"((?:[^"]|(?<=\\)")*)"|'((?:[^']|(?<=\\)')*)')/
+#QuotedValueRegexp = /(?:the )?(?:value |phrase |text )?(?:"((?:[^"\\]|\\"|\\n|\\\\)*)")|(?:'((?:[^'\\]|\\'|\\n|\\\\)*)')/
 QuotedValue = LaserTransform QuotedValueRegexp do |value1, value2|
   ## @name QuotedValue
   ## @format [the ][(value|phrase|text)] "|value|"

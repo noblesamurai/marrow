@@ -24,8 +24,9 @@ def non_catching_regex(r)
   # /\(abc\)/ or other arbitrary complexity expressions,
   # AND not doubling-up already ?:'d groups.  Preserves
   # options such as in (?i-mx:abc).
-  Regexp.new(r.source.gsub(/(?:(^\()|([^\\]\())(?!\?#)(?:\?([\-mix]*):)?/) {"#$1#{$2 == "((" ? "(?:(" : $2}?#$3:"}, r.options)
+  Regexp.new(r.source.gsub(/(?:(^\()|([^\\]\())(?!\?#|\?<=)(?:\?([\-mix]*):)?/) {"#$1#{$2 == "((" ? "(?:(" : $2}?#$3:"}, r.options)
 						  # ))
+
 end
 
 # Hacky excuse for a parser. I'm tired.
@@ -203,7 +204,12 @@ module Cucumber
 	  end
 
 	  def match(arg, capgroup)
-		#puts "Matching `#{capgroup}` `#{arg}`\n against `#{@identifier}` `#{@regexp}`"
+		#puts "Matching\n" + 
+		#		  "  `#{capgroup}`\n" +
+		#		  "  `#{arg}`\n" +
+		#		  "against\n" +
+		#		  "  `#{@identifier}`\n" +
+		#		  "  `#{@regexp}`\n"
 		if arg && capgroup && capgroup.include?(@identifier)
 		  arg.match(@regexp)
 		else
