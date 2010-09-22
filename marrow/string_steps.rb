@@ -24,5 +24,5 @@ QuotedValue = LaserTransform QuotedValueRegexp do |value1, value2|
   ## @desc Represents an arbitrary string, |value|. Use the escape character back-slash (\) for quotes and back-slashes, e.g. the value "He said, \"Hello.\""; text "the file C:\\AUTOEXEC.BAT".
   quote = value1 ? '"' : "'"
   value = value1 || value2
-  value.gsub("\\\\", "\\").gsub("\\#{quote}", "#{quote}").gsub("\\n", "\n")
+  value.gsub("\\\\", "\\").gsub("\\#{quote}", "#{quote}").gsub("\\n", "\n").force_encoding('utf-8')
 end
