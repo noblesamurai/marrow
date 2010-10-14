@@ -102,6 +102,7 @@ def WrapTransform(rxp, &block)
 end
 
 module Cucumber
+=begin
 	class StepMother
 
     def invoke_steps(steps_text, natural_language, origin)
@@ -143,6 +144,7 @@ module Cucumber
       end
     end
 	end
+=end
 
   module Ast
 		class TreeWalker
