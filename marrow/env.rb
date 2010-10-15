@@ -46,16 +46,16 @@ def capture_groups(r)
 	end
 
 	case ch
-	when '\\'
-	  escape = true
-    when '('
-	  opens << (i < chars.length-1 && chars[i+1] == '?' ? -1 : i)
-	when ')'
-	  j = opens.pop
-	  if j != -1
-		groups[j] = chars[j..i].join
-	  end
-	end
+		when '\\'
+			escape = true
+		when '('
+			opens << (i < chars.length-1 && chars[i+1] == '?' ? -1 : i)
+		when ')'
+			j = opens.pop
+			if j != -1
+			groups[j] = chars[j..i].join
+			end
+		end
   end
 
   #puts groups.reverse.inspect + "\n\n"
@@ -72,18 +72,25 @@ class String
   end
 
   def underscore
-	gsub(' ', '_').downcase
+		gsub(' ', '_').downcase
   end
 end
 
 class CandidateNotFoundError < StandardError; end
 
 Cucumber::Ast::StepInvocation.class_variable_set "@@before_steps", []
+Cucumber::Ast::Feature.class_variable_set "@@before_features", []
 
 def BeforeStep &block
   before_steps = Cucumber::Ast::StepInvocation.class_variable_get "@@before_steps"
   before_steps << block
   Cucumber::Ast::StepInvocation.class_variable_set "@@before_steps", before_steps
+end
+
+def BeforeFeature &block
+	before_features = Cucumber::Ast::Feature.class_variable_get "@@before_features"
+	before_features << block
+	Cucumber::Ast::Feature.class_variable_set "@@before_features", before_features
 end
 
 def WarpTransform(rxp, &block)
@@ -151,13 +158,25 @@ module Cucumber
 			attr_accessor :listeners
 		end
 
+		# Before Feature
+		class Feature
+			alias _real_honest_init init
+			def init
+				@@before_features.each do |b|
+					 instance_eval &b
+				end
+				_real_honest_init
+			end
+		end
+
+		# Before Step
 		class StepInvocation
 			alias _real_honest_invoke invoke
 			def invoke *opts, &b
-			@@before_steps.each do |b|
-				instance_eval &b
-			end
-			_real_honest_invoke *opts, &b
+				@@before_steps.each do |b|
+					instance_eval &b
+				end
+				_real_honest_invoke *opts, &b
 			end
 		end
   end
@@ -201,51 +220,51 @@ module Cucumber
 
 	class RbLaserTransform < RbTransform
 	  def initialize(rb_language, pattern, proc, identifier)
-		super(rb_language, pattern, proc);
-		@identifier = identifier;
+			super(rb_language, pattern, proc);
+			@identifier = identifier;
 	  end
 
 	  def match(arg, capgroup)
-		#puts "Matching\n" + 
-		#		  "  `#{capgroup}`\n" +
-		#		  "  `#{arg}`\n" +
-		#		  "against\n" +
-		#		  "  `#{@identifier}`\n" +
-		#		  "  `#{@regexp}`\n"
-		if arg && capgroup && capgroup.include?(@identifier)
-		  arg.match(@regexp)
-		else
-		  nil
-		end
+			#puts "Matching\n" + 
+			#		  "  `#{capgroup}`\n" +
+			#		  "  `#{arg}`\n" +
+			#		  "against\n" +
+			#		  "  `#{@identifier}`\n" +
+			#		  "  `#{@regexp}`\n"
+			if arg && capgroup && capgroup.include?(@identifier)
+				arg.match(@regexp)
+			else
+				nil
+			end
 	  end
 
-      def Transform(arg, *contexts)
-		if contexts.length > 0
-		  context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
-		else
-		  context = nil
-		end
-
-        @rb_language.execute_transforms([arg], context, false).first
-      end
-
-      def invoke(arg, capgroup)
-        if matched = match(arg, capgroup)
-		  if matched.captures.empty?
-			[arg]
-		  else
-			newargs = matched.captures
-
-			# For nested LaserTransforms
-			capgroups = capture_groups(@regexp)
-			0.upto(newargs.length-1) do |i|
-			  newargs[i] = Transform(newargs[i], capgroups[i])
+		def Transform(arg, *contexts)
+			if contexts.length > 0
+				context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
+			else
+				context = nil
 			end
 
-			@rb_language.current_world.cucumber_instance_exec(true, @regexp.inspect, *newargs, &@proc)
-		  end
-        end
-      end
+			@rb_language.execute_transforms([arg], context, false).first
+		end
+
+		def invoke(arg, capgroup)
+			if matched = match(arg, capgroup)
+				if matched.captures.empty?
+				[arg]
+				else
+				newargs = matched.captures
+
+				# For nested LaserTransforms
+				capgroups = capture_groups(@regexp)
+				0.upto(newargs.length-1) do |i|
+					newargs[i] = Transform(newargs[i], capgroups[i])
+				end
+
+				@rb_language.current_world.cucumber_instance_exec(true, @regexp.inspect, *newargs, &@proc)
+				end
+			end
+		end
 	end
 
 	class RbStepDefinition
@@ -285,13 +304,13 @@ module Cucumber
 	module RbWorld
       # Call a Transform with a string from another Transform definition
       def Transform(arg, *contexts)
-	  	return arg unless arg.is_a? String
+				return arg unless arg.is_a? String
 
-			if contexts.length > 0
-				context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
-			else
-				context = nil
-			end
+				if contexts.length > 0
+					context = /#{contexts.map {|ctxt| ctxt.is_a?(Regexp) ? ctxt.source : ctxt}.join}/
+				else
+					context = nil
+				end
 
         rb = @__cucumber_step_mother.load_programming_language('rb')
         rb.execute_transforms([arg], context, false).first
