@@ -26,3 +26,14 @@ QuotedValue = LaserTransform QuotedValueRegexp do |value1, value2|
   value = value1 || value2
   value.gsub("\\\\", "\\").gsub("\\#{quote}", "#{quote}").gsub("\\n", "\n").force_encoding('utf-8')
 end
+
+QuotedValueRegexpPure = /"((?:[^"]|(?<=\\)")*)"|'((?:[^']|(?<=\\)')*)'/
+
+QuotedValuePure = LaserTransform QuotedValueRegexpPure do |value1, value2|
+  ## @name QuotedValue
+  ## @format [the ][(value|phrase|text)] "|value|"
+  ## @desc Represents an arbitrary string, |value|. Use the escape character back-slash (\) for quotes and back-slashes, e.g. the value "He said, \"Hello.\""; text "the file C:\\AUTOEXEC.BAT".
+  quote = value1 ? '"' : "'"
+  value = value1 || value2
+  value.gsub("\\\\", "\\").gsub("\\#{quote}", "#{quote}").gsub("\\n", "\n").force_encoding('utf-8')
+end
