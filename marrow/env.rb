@@ -24,7 +24,7 @@ def non_catching_regex(r)
   # /\(abc\)/ or other arbitrary complexity expressions,
   # AND not doubling-up already ?:'d groups.  Preserves
   # options such as in (?i-mx:abc).
-  Regexp.new(r.source.gsub(/(?:(^\()|([^\\]\())(?!\?#|\?<=)(?:\?([\-mix]*):)?/) {"#$1#{$2 == "((" ? "(?:(" : $2}?#$3:"}, r.options)
+  Regexp.new(r.source.gsub(/(?:(^\()|([^\\]\())(?!\?#|\?<=|\?!|\?=)(?:\?([\-mix]*):)?/) {"#$1#{$2 == "((" ? "(?:(" : $2}?#$3:"}, r.options)
 						  # ))
 
 end
@@ -87,7 +87,7 @@ def BeforeStep &block
 end
 
 def WarpTransform(rxp, &block)
-	When /^(.*)#{rxp}(.*)$/	do |*args|
+	When /^(.*?)#{rxp}(.*?)$/	do |*args|
 		before = args[0]
 		after = args[-1]
 
@@ -96,7 +96,7 @@ def WarpTransform(rxp, &block)
 end
 
 def WrapTransform(rxp, &block)
-	When /^(.*) #{rxp}$/ do |step, *args|
+	When /^(.*?) #{rxp}$/ do |step, *args|
 		instance_exec(step, *args, &block)
 	end
 end
