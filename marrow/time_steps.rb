@@ -21,25 +21,24 @@ When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})(?: \([Rr]eason:(?:.*)\))?
 end
 
 WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |step, time, check|
-  count = 0
+    start = Time.now
+    nextt = start + check
 
-	check ||= 1
+    check ||= 1
 
-  loop do
+    loop do
+	begin
+	    When step
+	    break
+	rescue Exception => e
+	    raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
 
-    begin
-      When step
-      break
-    rescue Exception => e
-      raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
+	    now = Time.now
+	    elapsed = now - start
+	    raise e if elapsed > time
 
-      if count > time
-        raise e
-      else
-        count += check
-        sleep check
-      end
+	    nextt += check while nextt < now
+	    sleep nextt - now
+	end
     end
-
-  end
 end
