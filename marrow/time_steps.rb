@@ -22,9 +22,8 @@ end
 
 WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |step, time, check|
     start = Time.now
-    nextt = start + check
-
     check ||= 1
+    nextt = start + check
 
     loop do
 	begin
