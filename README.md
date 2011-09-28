@@ -10,6 +10,7 @@ More here soon.
  - [Daniel Assange](http://github.com/somnidea) (link defunct) with [Noble Samurai](http://github.com/noblesamurai)
  - [Anneli Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
  - [Dale Maggee](http://github.com/AntiSol) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Julian Thatcher](http://github.com/DaedalusRaistlin) with [Noble Samurai](http://github.com/noblesamurai)
  - You?
 
 ## license
