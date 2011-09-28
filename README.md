@@ -7,8 +7,8 @@ More here soon.
 
 ## contributors
 
- - [Daniel Assange](http://github.com/somnidea) with [Noble Samurai](http://github.com/noblesamurai)
- - [Arlen Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Daniel Assange](http://github.com/somnidea) (link defunct) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Anneli Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
  - [Dale Maggee](http://github.com/AntiSol) with [Noble Samurai](http://github.com/noblesamurai)
  - You?
 
