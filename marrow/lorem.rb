@@ -1,4 +1,4 @@
-# Copyright 2010 Noble Samurai
+# Copyright 2010-2011 Noble Samurai
 # 
 # Marrow is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -130,33 +130,33 @@ $lorem_words.downcase!
 $lorem_words = $lorem_words.split(/ /)
 
 def lorem(word_count, paragraphing=false)
-  lorem = ""
+	lorem = ""
 
-  twn = 0
-  twc = word_count
-  while twn < twc
-	pwn = 0
-	pwc = rand(100) + 200
-	while pwn < pwc and twn < twc do
-	  swn = 0
-	  swc = rand(10) + 3
-	  while swn < swc and pwn < pwc and twn < twc do
-		word = $lorem_words[rand($lorem_words.length)]
-		if swn == 0
-		  lorem << "#{word.capitalize} "
-		else
-		  lorem << "#{word} "
+	twn = 0
+	twc = word_count
+	while twn < twc
+		pwn = 0
+		pwc = rand(100) + 200
+		while pwn < pwc and twn < twc do
+			swn = 0
+			swc = rand(10) + 3
+			while swn < swc and pwn < pwc and twn < twc do
+				word = $lorem_words[rand($lorem_words.length)]
+				if swn == 0
+					lorem << "#{word.capitalize} "
+				else
+					lorem << "#{word} "
+				end
+
+				twn +=1
+				pwn +=1
+				swn +=1
+			end
+			lorem << ". "
 		end
-
-		twn +=1
-		pwn +=1
-		swn +=1
-	  end
-	  lorem << ". "
+		lorem << "\n\n" if paragraphing
 	end
-	lorem << "\n\n" if paragraphing
-  end
 
-  lorem.gsub(/ \./, '.')
+	lorem.gsub(/ \./, '.')
 end
 

@@ -8,14 +8,14 @@ More here soon.
 ## contributors
 
  - [Daniel Assange](http://github.com/somnidea) (link defunct) with [Noble Samurai](http://github.com/noblesamurai)
- - [Anneli Cuss](http://github.com/celtic) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Anneli Cuss](http://github.com/anneli) with [Noble Samurai](http://github.com/noblesamurai)
  - [Dale Maggee](http://github.com/AntiSol) with [Noble Samurai](http://github.com/noblesamurai)
  - [Julian Thatcher](http://github.com/DaedalusRaistlin) with [Noble Samurai](http://github.com/noblesamurai)
  - You?
 
 ## license
 
-Copyright 2010 Noble Samurai
+Copyright 2010–2011 Noble Samurai
 
 Marrow is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 

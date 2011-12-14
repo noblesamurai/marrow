@@ -1,4 +1,4 @@
-# Copyright 2010 Noble Samurai
+# Copyright 2010-2011 Noble Samurai
 # 
 # Marrow is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,28 +16,28 @@
 ## @desc Actions involving waiting for things, error messages and block messages on timeouts, etc.
 
 When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})(?: \([Rr]eason:(?:.*)\))?$/ do |time|
-  ## @desc Pauses test execution for |time|.
-  sleep time
+	## @desc Pauses test execution for |time|.
+	sleep time
 end
 
 WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |step, time, check|
-    start = Time.now
-    check ||= 1
-    nextt = start + check
+	start = Time.now
+	check ||= 1
+	nextt = start + check
 
-    loop do
-	begin
-	    When step
-	    break
-	rescue Exception => e
-	    raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
+	loop do
+		begin
+			When step
+			break
+		rescue Exception => e
+			raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
 
-	    now = Time.now
-	    elapsed = now - start
-	    raise e if elapsed > time
+			now = Time.now
+			elapsed = now - start
+			raise e if elapsed > time
 
-	    nextt += check while nextt < now
-	    sleep nextt - now
+			nextt += check while nextt < now
+			sleep nextt - now
+		end
 	end
-    end
 end
