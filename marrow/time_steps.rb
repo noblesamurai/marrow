@@ -20,14 +20,14 @@ When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})(?: \([Rr]eason:(?:.*)\))?
 	sleep time
 end
 
-WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |step, time, check|
+def works_within time, check, &f
 	start = Time.now
 	check ||= 1
 	nextt = start + check
 
 	loop do
 		begin
-			When step
+			f.call
 			break
 		rescue Exception => e
 			raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
@@ -39,5 +39,11 @@ WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |s
 			nextt += check while nextt < now
 			sleep nextt - now
 		end
+	end
+end
+
+WrapTransform /within (#{TimeLength})(?: checking every (#{TimeLength}))?/ do |step, time, check|
+	works_within(time, check) do
+		When step
 	end
 end
