@@ -21,22 +21,28 @@ When /^I (?:wait|sleep|pause) (?:for )?(#{TimeLength})(?: \([Rr]eason:(?:.*)\))?
 end
 
 def works_within time, check, &f
+	puts "[works_within] Started with: #{time} checking every #{check}"
 	start = Time.now
 	check ||= 1
 	nextt = start + check
+	puts "[works_within] Start Time: #{start}"
 
 	loop do
 		begin
 			f.call
+			puts "[works_within] Finishing successfully"
 			break
 		rescue Exception => e
 			raise e if e.is_a? Cucumber::Undefined or e.is_a? Cucumber::Pending or e.is_a? Cucumber::Ambiguous
 
 			now = Time.now
+			puts "[works_within] Now: #{now}"
 			elapsed = now - start
+			puts "[works_within] Elapsed: #{elapsed} (out of #{time})"
 			raise e if elapsed > time
 
 			nextt += check while nextt < now
+			puts "[works_within] Going to sleep for #{nextt - now}"
 			sleep nextt - now
 		end
 	end
