@@ -16,7 +16,7 @@ More here soon.
 
 ## license
 
-Copyright 2010–2011 Noble Samurai
+Copyright 2010–2012 Noble Samurai
 
 Marrow is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
