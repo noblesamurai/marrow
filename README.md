@@ -8,7 +8,7 @@ More here soon.
 ## contributors
 
  - [Daniel Assange](http://github.com/somnidea) (link defunct) with [Noble Samurai](http://github.com/noblesamurai)
- - [Anneli Cuss](http://github.com/anneli) with [Noble Samurai](http://github.com/noblesamurai)
+ - [Arlen Cuss](http://github.com/anneli) with [Noble Samurai](http://github.com/noblesamurai)
  - [Dale Maggee](http://github.com/AntiSol) with [Noble Samurai](http://github.com/noblesamurai)
  - [Julian Thatcher](http://github.com/DaedalusRaistlin) with [Noble Samurai](http://github.com/noblesamurai)
  - [Misha Moroshko](http://github.com/moroshko) with [Noble Samurai](http://github.com/noblesamurai)
