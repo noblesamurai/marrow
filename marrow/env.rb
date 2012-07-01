@@ -18,13 +18,28 @@ require 'cucumber/rb_support/rb_transform'
 require 'digest/md5'
 
 def non_catching_regex(r)
-	# WARNING: voodoo ahead
-	# Turns /(abc)/ into /(?:abc)/, while not munging
-	# /\(abc\)/ or other arbitrary complexity expressions,
-	# AND not doubling-up already ?:'d groups.  Preserves
-	# options such as in (?i-mx:abc).
-	Regexp.new(r.source.gsub(/(?:(^\()|([^\\]\())(?!\?#|\?<=|\?!|\?=)(?:\?([\-mix]*):)?/) {"#$1#{$2 == "((" ? "(?:(" : $2}?#$3:"}, r.options)
-	                        # ))
+	# Turns /(abc)/ into /(?:abc)/, being careful not to ruin other complex
+	# expressions.
+	# Does not double-up groups with "?:" already specified.
+	# Preserves options such as in (?i-mx:abc).
+	transformed = source.gsub(/
+		# Match "(", as long as it's not immediately following a "\".
+		(?<! \\ ) \(
+
+		# Fail if "?#", "?<", "?!" or "?=" follows.
+		(?! \?\# | \?< | \?! | \?= )
+
+		# Optionally match options, which look like:
+		#   "?mix:"
+		#   "?i-mx:"
+		#   etc.
+		# Capture just the "i-mx" part.
+		(?: \?([\-mix]*): )?
+	/x) {
+		# Return "(?:" with any options inserted between.
+		"(?#$1:"
+	}
+	Regexp.new(transformed, options)
 end
 
 # Hacky excuse for a parser. I'm tired.
