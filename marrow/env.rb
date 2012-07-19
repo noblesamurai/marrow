@@ -17,12 +17,12 @@ require 'cucumber'
 require 'cucumber/rb_support/rb_transform'
 require 'digest/md5'
 
-def non_catching_regex(r)
+def non_catching_regex(regex)
 	# Turns /(abc)/ into /(?:abc)/, being careful not to ruin other complex
 	# expressions.
 	# Does not double-up groups with "?:" already specified.
 	# Preserves options such as in (?i-mx:abc).
-	transformed = source.gsub(/
+	transformed = regex.source.gsub(/
 		# Match "(", as long as it's not immediately following a "\".
 		(?<! \\ ) \(
 
@@ -39,7 +39,7 @@ def non_catching_regex(r)
 		# Return "(?:" with any options inserted between.
 		"(?#$1:"
 	}
-	Regexp.new(transformed, options)
+	Regexp.new(transformed, regex.options)
 end
 
 # Hacky excuse for a parser. I'm tired.
